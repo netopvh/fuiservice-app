@@ -7,15 +7,28 @@ import Skeleton from 'react-loading-skeleton'
 import Maps from "@/components/Maps";
 import { currencyFormatter } from "@/utils/currencyUtils";
 
+
 export default function Page() {
 
 
     const [content, setContent] = useState<string>('dispatch-map')
     const [selected, setSelected] = useState<string>('all')
     const [search, setSearch] = useState<string>('SEARCHING')
+    const [location, setLocation] = useState<any>({ lat: 0, lng: 0 })
 
     const interval = useRef<any>()
     const [trigger, { data: trips, error, isLoading }] = useLazyGetTripsQuery()
+
+    useEffect(() => {
+        if ('geolocation' in navigator) {
+            navigator.geolocation.getCurrentPosition((position) => {
+                setLocation({
+                    lat: position.coords.latitude,
+                    lng: position.coords.longitude
+                })
+            })
+        }
+    }, [])
 
     useEffect(() => {
         trigger({ type: search })
@@ -126,7 +139,7 @@ export default function Page() {
                         title="Mapa"
                     >
                         <div className="w-full h-1/2">
-                            <Maps />
+                            <Maps location={location} />
                         </div>
                     </Panel>
                 </div>

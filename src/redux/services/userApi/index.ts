@@ -63,4 +63,4 @@ export const userApi = createApi({
   }),
 });
 
-export const { usePostLoginMutation, usePostRegisterMutation, usePostLogoutMutation, useGetUserInfoQuery } = userApi;
+export const { usePostLoginMutation, usePostRegisterMutation, usePostLogoutMutation, useGetUserInfoQuery, useLazyGetUserInfoQuery } = userApi;

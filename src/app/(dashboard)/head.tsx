@@ -7,8 +7,8 @@ import { usePathname } from 'next/navigation';
 import React, { useEffect, useState } from 'react'
 import Dropdown from './_components/Dropdown';
 import Image from 'next/image';
-import { useGetUserInfoQuery, usePostLogoutMutation } from '@/redux/services/userApi';
-import { getCookie, removeCookie } from '@/utils/cookies';
+import { useGetUserInfoQuery, useLazyGetUserInfoQuery, usePostLogoutMutation } from '@/redux/services/userApi';
+import { removeCookie } from '@/utils/cookies';
 import { useRouter } from 'next/navigation';
 import { APP_ROUTES } from '@/constants/app-routes';
 
@@ -16,10 +16,13 @@ export default function Head() {
 
     const pathname = usePathname()
     const [postLogout] = usePostLogoutMutation();
-    const { data } = useGetUserInfoQuery();
+    const [trigger, { data: user, isLoading, isError, error }] = useLazyGetUserInfoQuery()
 
     const { replace } = useRouter();
 
+    useEffect(() => {
+        trigger()
+    }, [])
 
     useEffect(() => {
         const selector = document.querySelector('ul.horizontal-menu a[href="' + window.location.pathname + '"]');
@@ -501,10 +504,10 @@ export default function Head() {
                                             <Image className="h-10 w-10 rounded-md object-cover" src="/images/user-profile.jpeg" alt="userProfile" width={50} height={50} />
                                             <div className="ltr:pl-4 rtl:pr-4">
                                                 <h4 className="text-xs">
-                                                    {data?.data.name}
+                                                    {user?.data.name}
                                                 </h4>
                                                 <button type="button" className="text-black/60 hover:text-primary dark:text-dark-light/60 dark:hover:text-white text-xs">
-                                                    {data?.data.email}
+                                                    {user?.data.email}
                                                 </button>
                                             </div>
                                         </div>

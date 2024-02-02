@@ -256,7 +256,7 @@ export default function Sidebar() {
                                 </h2>
 
                                 <li className="menu nav-item">
-                                    <Link href="/charts" className="group">
+                                    <Link href="/" className="group">
                                         <div className="flex items-center">
                                             <IconMenuCharts className="shrink-0 group-hover:!text-primary" />
                                             <span className="text-black ltr:pl-3 rtl:pr-3 dark:text-[#506690] dark:group-hover:text-white-dark">Lançamento de Serviços</span>
@@ -265,7 +265,7 @@ export default function Sidebar() {
                                 </li>
 
                                 <li className="menu nav-item">
-                                    <Link href="/charts" className="group">
+                                    <Link href="/" className="group">
                                         <div className="flex items-center">
                                             <IconMenuInvoice className="shrink-0 group-hover:!text-primary" />
                                             <span className="text-black ltr:pl-3 rtl:pr-3 dark:text-[#506690] dark:group-hover:text-white-dark">Resumo Financeiro</span>
