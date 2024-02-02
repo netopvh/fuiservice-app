@@ -1,7 +1,5 @@
 "use client";
 
-import LoadingButton from '@/components/LoadingButton';
-import PasswordInput from '@/components/PasswordInput';
 import { UserLoginDTO } from '@/domain/dto';
 import { Token } from '@/domain/entities/token';
 import { usePostLoginMutation } from '@/redux/services/userApi';
@@ -17,6 +15,7 @@ import Link from 'next/link';
 import IconMail from '@/components/Icon/IconMail';
 import IconLockDots from '@/components/Icon/IconLockDots';
 import GradientButton from '@/components/GradientButton';
+import PasswordInput from '@/components/PasswordInput';
 import { IDefaultResponse, IDispatcherResponse, ITokenResponse } from '@/domain/interfaces';
 
 const validationSchema = yup.object({
@@ -48,13 +47,12 @@ export default function Page() {
         await postLogin(values)
             .unwrap()
             .then(async (data: IDefaultResponse<ITokenResponse<IDispatcherResponse>>) => {
-                console.log('data', data);
                 const token: Token = new Token(data.data.token);
                 await setToken(token);
-                // replace(APP_ROUTES.private.dashboard);
+                replace(APP_ROUTES.private.dashboard);
             })
             .catch((error) => {
-                setErrors({ username: error.data });
+                setErrors({ email: error.data.message });
             });
     }
 
@@ -120,7 +118,7 @@ export default function Page() {
                                         <div>
                                             <label htmlFor="password">Senha</label>
                                             <div className="relative text-white-dark">
-                                                <Field name="password" placeholder="Informe sua senha" className="form-input ps-10 placeholder:text-white-dark" />
+                                                <PasswordInput name="password" placeholder="Informe sua senha" className="form-input ps-10 placeholder:text-white-dark" />
                                                 <span className="absolute start-4 top-1/2 -translate-y-1/2">
                                                     <IconLockDots fill={true} />
                                                 </span>

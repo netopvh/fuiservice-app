@@ -1,5 +1,6 @@
 'use client'
 
+import IconBook from '@/components/Icon/IconBook';
 import IconMenuCharts from '@/components/Icon/Menu/IconMenuCharts';
 import IconMenuDashboard from '@/components/Icon/Menu/IconMenuDashboard';
 import IconMenuForms from '@/components/Icon/Menu/IconMenuForms';
@@ -167,7 +168,7 @@ export default function Sidebar() {
                                 <li className="nav-item">
                                     <ul>
                                         <li className="nav-item">
-                                            <Link href="/home" className="group">
+                                            <Link href={APP_ROUTES.private.panel} className="group">
                                                 <div className="flex items-center">
                                                     <IconMenuWidgets className="shrink-0 group-hover:!text-primary" />
                                                     <span className="text-black ltr:pl-3 rtl:pr-3 dark:text-[#506690] dark:group-hover:text-white-dark">Painel de Serviços</span>
@@ -175,6 +176,15 @@ export default function Sidebar() {
                                             </Link>
                                         </li>
                                     </ul>
+                                </li>
+
+                                <li className="nav-item">
+                                    <Link href="/home" className="group">
+                                        <div className="flex items-center">
+                                            <IconBook className="shrink-0 group-hover:!text-primary" />
+                                            <span className="text-black ltr:pl-3 rtl:pr-3 dark:text-[#506690] dark:group-hover:text-white-dark">Solicitações</span>
+                                        </div>
+                                    </Link>
                                 </li>
 
                                 <li className="nav-item">

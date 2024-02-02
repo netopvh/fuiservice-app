@@ -2,8 +2,8 @@
 
 import React, { useEffect, useState } from 'react'
 import './layout.css'
+import 'react-loading-skeleton/dist/skeleton.css'
 import { RootState, useAppDispatch, useAppSelector } from '@/redux/store'
-import { useTranslation } from 'react-i18next'
 import { toggleAnimation, toggleLayout, toggleLocale, toggleMenu, toggleNavbar, toggleRtl, toggleSemidark, toggleSidebar, toggleTheme } from '@/redux/store/slices/themeConfig'
 import themeConfig from '@/theme.config'
 import { usePathname, useSearchParams } from 'next/navigation'

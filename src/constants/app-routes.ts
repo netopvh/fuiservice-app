@@ -1,6 +1,7 @@
 export const APP_ROUTES = {
     private: {
         dashboard: '/home',
+        panel: '/home/panel',
         unauthorized: 'unauthorized',
     },
     public: {

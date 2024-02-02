@@ -1,6 +1,6 @@
 'use client'
 
-import { RootState, useAppDispatch, useAppSelector } from "@/redux/store"
+import { useAppDispatch } from "@/redux/store"
 import { setPageTitle } from "@/redux/store/slices/themeConfig";
 import Link from "next/link"
 import { useEffect } from "react";
@@ -9,6 +9,10 @@ import LoadingMask from "@/components/LoadingMask";
 import IconHorizontalDots from "@/components/Icon/IconHorizontalDots";
 import Dropdown from "../_components/Dropdown";
 import IconEye from "@/components/Icon/IconEye";
+import Panel from "@/components/Panel";
+import { useGetTripsQuery } from "@/redux/services/tripsApi";
+import { currencyFormatter } from "@/utils/currencyUtils";
+import Skeleton from 'react-loading-skeleton'
 
 const Indicators = dynamic(() => import('./_components/Indicators'), {
     loading: () => <LoadingMask customHeight={200} />,
@@ -24,6 +28,7 @@ export default function Page() {
 
     const dispatch = useAppDispatch();
 
+    const { data: trips, isLoading, isError, error } = useGetTripsQuery({ type: 'ALL' });
 
     useEffect(() => {
         dispatch(setPageTitle('Visão Geral'));
@@ -114,45 +119,22 @@ export default function Page() {
                 {/* <Indicators />
                 <VisitsChart /> */}
 
-                {/* <div className="mb-6 grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
+                <div className="mb-6 grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
 
                     <Panel
                         title="Transações"
-                        dropdown={
-                            <Dropdown
-                                placement={`${isRtl ? 'bottom-start' : 'bottom-end'}`}
-                                button={
-                                    <svg className="h-5 w-5 text-black/70 hover:!text-primary dark:text-white/70" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <circle cx="5" cy="12" r="2" stroke="currentColor" strokeWidth="1.5" />
-                                        <circle opacity="0.5" cx="12" cy="12" r="2" stroke="currentColor" strokeWidth="1.5" />
-                                        <circle cx="19" cy="12" r="2" stroke="currentColor" strokeWidth="1.5" />
-                                    </svg>
-                                }
-                            >
-                                <ul>
-                                    <li>
-                                        <button type="button">Ver Relatório</button>
-                                    </li>
-                                    <li>
-                                        <button type="button">Editar Relatório</button>
-                                    </li>
-                                    <li>
-                                        <button type="button">Marcar Concluído</button>
-                                    </li>
-                                </ul>
-                            </Dropdown>
-                        }>
+                    >
                         <div>
                             <div className="space-y-6">
                                 <div className="flex">
-                                    <span className="grid h-9 w-9 place-content-center rounded-md bg-success-light text-base text-success dark:bg-success dark:text-success-light">SP</span>
+                                    <span className="grid h-9 w-9 place-content-center rounded-md bg-success-light text-base text-success dark:bg-success dark:text-success-light">PA</span>
                                     <div className="flex-1 px-3">
-                                        <div>Shaun Park</div>
+                                        <div>Paula Azevedo</div>
                                         <div className="text-xs text-white-dark dark:text-gray-500">10 Jan 1:00PM</div>
                                     </div>
                                     <span className="whitespace-pre px-1 text-base text-success ltr:ml-auto rtl:mr-auto">+$36.11</span>
                                 </div>
-                                <div className="flex">
+                                {/* <div className="flex">
                                     <span className="grid h-9 w-9 place-content-center rounded-md bg-warning-light text-warning dark:bg-warning dark:text-warning-light">
                                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                             <path
@@ -243,41 +225,74 @@ export default function Page() {
                                         <div className="text-xs text-white-dark dark:text-gray-500">04 Jan 1:00PM</div>
                                     </div>
                                     <span className="whitespace-pre px-1 text-base text-danger ltr:ml-auto rtl:mr-auto">-$22.00</span>
-                                </div>
+                                </div> */}
                             </div>
                         </div>
                     </Panel>
 
-                    <Panel title="Últimos Pedidos" className="col-span-2">
+                    <Panel title="Últimos Solicitações" className="col-span-2">
                         <div className="table-responsive">
                             <table>
                                 <thead>
                                     <tr>
-                                        <th className="ltr:rounded-l-md rtl:rounded-r-md">Customer</th>
-                                        <th>Product</th>
-                                        <th>Invoice</th>
-                                        <th>Price</th>
+                                        <th className="ltr:rounded-l-md rtl:rounded-r-md">Cliente</th>
+                                        <th>Prestador</th>
+                                        <th>Serviço</th>
+                                        <th>Valor</th>
                                         <th className="ltr:rounded-r-md rtl:rounded-l-md">Status</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr className="group text-white-dark hover:text-black dark:hover:text-white-light/90">
-                                        <td className="min-w-[150px] text-black dark:text-white">
-                                            <div className="flex items-center">
-                                                <img className="h-8 w-8 rounded-md object-cover ltr:mr-3 rtl:ml-3" src="/images/profile-6.jpeg" alt="avatar" />
-                                                <span className="whitespace-nowrap">Luke Ivory</span>
-                                            </div>
-                                        </td>
-                                        <td className="text-primary">Headphone</td>
-                                        <td>
-                                            <Link href="/apps/invoice/preview">#46894</Link>
-                                        </td>
-                                        <td>$56.07</td>
-                                        <td>
-                                            <span className="badge bg-success shadow-md dark:group-hover:bg-transparent">Paid</span>
-                                        </td>
-                                    </tr>
-                                    <tr className="group text-white-dark hover:text-black dark:hover:text-white-light/90">
+                                    {isLoading && (
+                                        Array(4).fill(0).map((_, index) => (
+                                            <tr key={index} className="group text-white-dark hover:text-black dark:hover:text-white-light/90">
+                                                <td>
+                                                    <Skeleton />
+                                                </td>
+                                                <td>
+                                                    <Skeleton />
+                                                </td>
+                                                <td>
+                                                    <Skeleton />
+                                                </td>
+                                                <td>
+                                                    <Skeleton />
+                                                </td>
+                                                <td>
+                                                    <Skeleton />
+                                                </td>
+                                            </tr>
+                                        ))
+                                    )}
+                                    {trips?.data.length === 0 && (
+                                        <tr className="group text-white-dark hover:text-black dark:hover:text-white-light/90">
+                                            <td colSpan={5} className="text-center">Nenhuma viagem encontrada</td>
+                                        </tr>
+                                    )}
+                                    {trips?.data?.map((trip, index) => (
+                                        <tr key={index} className="group text-white-dark hover:text-black dark:hover:text-white-light/90">
+                                            <td className="min-w-[150px] text-black dark:text-white">
+                                                <div className="flex items-center">
+                                                    <img className="h-8 w-8 rounded-md object-cover ltr:mr-3 rtl:ml-3" src="/images/profile-6.jpeg" alt="avatar" />
+                                                    <span className="whitespace-nowrap">{trip?.user.full_name}</span>
+                                                </div>
+                                            </td>
+                                            <td className="min-w-[150px] text-black dark:text-white">
+                                                <div className="flex items-center">
+                                                    <img className="h-8 w-8 rounded-md object-cover ltr:mr-3 rtl:ml-3" src="/images/profile-6.jpeg" alt="avatar" />
+                                                    <span className="whitespace-nowrap">{trip?.provider.full_name}</span>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                {trip?.service_type?.name}
+                                            </td>
+                                            <td>{currencyFormatter(trip?.estimated_fare)}</td>
+                                            <td>
+                                                <span className={`${trip?.badge} shadow-md dark:group-hover:bg-transparent`}>{trip?.status}</span>
+                                            </td>
+                                        </tr>
+                                    ))}
+                                    {/* <tr className="group text-white-dark hover:text-black dark:hover:text-white-light/90">
                                         <td className="text-black dark:text-white">
                                             <div className="flex items-center">
                                                 <img className="h-8 w-8 rounded-md object-cover ltr:mr-3 rtl:ml-3" src="/images/profile-7.jpeg" alt="avatar" />
@@ -340,12 +355,12 @@ export default function Page() {
                                         <td>
                                             <span className="badge bg-success shadow-md dark:group-hover:bg-transparent">Paid</span>
                                         </td>
-                                    </tr>
+                                    </tr> */}
                                 </tbody>
                             </table>
                         </div>
                     </Panel>
-                </div> */}
+                </div>
             </div>
         </>
     )

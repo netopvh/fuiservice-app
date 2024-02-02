@@ -59,12 +59,10 @@ export default function Head() {
     }
 
     const handleLogout = async () => {
-        await postLogout({ token: getCookie('token') || '' })
+        await postLogout()
             .unwrap()
             .then((res) => {
-                console.log(res)
                 removeCookie('token')
-                removeCookie('roles')
                 replace(APP_ROUTES.public.login)
             })
             .catch((error) => {
@@ -503,10 +501,10 @@ export default function Head() {
                                             <Image className="h-10 w-10 rounded-md object-cover" src="/images/user-profile.jpeg" alt="userProfile" width={50} height={50} />
                                             <div className="ltr:pl-4 rtl:pr-4">
                                                 <h4 className="text-xs">
-                                                    {data?.name}
+                                                    {data?.data.name}
                                                 </h4>
                                                 <button type="button" className="text-black/60 hover:text-primary dark:text-dark-light/60 dark:hover:text-white text-xs">
-                                                    {data?.info}
+                                                    {data?.data.email}
                                                 </button>
                                             </div>
                                         </div>

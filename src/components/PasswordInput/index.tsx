@@ -18,7 +18,7 @@ export default function PasswordInput({ name, placeholder }: IProps) {
                 name={name}
                 type={isPasswordVisible ? "text" : "password"}
                 placeholder={placeholder}
-                className="w-full px-4 py-2 text-gray-500 text-base border border-gray-300 rounded outline-none focus:border-purple-700 focus:outline-none focus:ring-1 focus:ring-purple-700"
+                className="form-input ps-10 placeholder:text-white-dark"
             />
             <button
                 type="button"

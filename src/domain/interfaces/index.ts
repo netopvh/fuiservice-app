@@ -27,6 +27,57 @@ export interface IDispatcherResponse {
     updated_at: string;
 }
 
+export interface IUserResponse {
+    id: number;
+    full_name: string;
+    email: string;
+    mobile: string;
+    picture: string;
+}
+
+export interface IProviderResponse {
+    id: number;
+    full_name: string;
+    vtr: string;
+    email: string;
+    mobile: string;
+    avatar: string;
+}
+
+export interface IServiceTypeResponse {
+    id: number;
+    name: string;
+    image: string;
+    status: number;
+    is_visible: number;
+}
+
+export interface ITripResponse {
+    id: number;
+    booking_id: string;
+    s_address: string;
+    s_latitude: number;
+    s_longitude: number;
+    d_address: string;
+    d_latitude: number;
+    d_longitude: number;
+    accept_latitude: number;
+    accept_longitude: number;
+    assigned_at: string;
+    started_at: string;
+    finished_at: string;
+    route_key: string;
+    estimated_fare: number;
+    user: IUserResponse;
+    provider: IProviderResponse;
+    service_type: IServiceTypeResponse;
+    status: string;
+    badge: string;
+    current_provider_id: number;
+    created_at: string;
+    updated_at: string;
+}
+
 export interface IUserInfoResponse {
     id: number;
     name: string;

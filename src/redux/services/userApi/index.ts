@@ -1,7 +1,7 @@
-import { UserLoginDTO } from "@/domain/dto";
+import { UserLoginDTO, UserRegisterDTO } from "@/domain/dto";
 import { getCookie } from "@/utils/cookies";
 import { FetchBaseQueryMeta, createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { IDefaultResponse, IDispatcherResponse, ITokenResponse, IUserInfoResponse } from "@/domain/interfaces";
+import { IDefaultResponse, IDispatcherResponse, ITokenResponse } from "@/domain/interfaces";
 
 const BASE_URL = process.env.REACT_APP_API_URL;
 
@@ -24,27 +24,35 @@ export const userApi = createApi({
       }),
       transformResponse: (response: IDefaultResponse<ITokenResponse<IDispatcherResponse>>, meta: FetchBaseQueryMeta) => {
 
-        console.log('response', response);
         if (meta?.response?.ok) {
           return response;
         }
         return response;
       }
     }),
-    postLogout: builder.mutation<any, { token: string }>({
-      query: (args) => ({
-
-        url: `/user-token/${args?.token}`,
-        method: "DELETE",
+    postRegister: builder.mutation<IDefaultResponse<IDispatcherResponse>, UserRegisterDTO>({
+      query: (body: UserRegisterDTO) => ({
+        url: "/register",
+        method: "POST",
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body,
+      }),
+    }),
+    postLogout: builder.mutation<any, void>({
+      query: () => ({
+        url: `/logout`,
+        method: "POST",
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `${getCookie('token')}`
         },
       }),
     }),
-    getUserInfo: builder.query<IUserInfoResponse, void>({
+    getUserInfo: builder.query<IDefaultResponse<IDispatcherResponse>, void>({
       query: () => ({
-        url: "/user-token/user-info",
+        url: "/me",
         method: "GET",
         headers: {
           'Content-Type': 'application/json',
@@ -55,4 +63,4 @@ export const userApi = createApi({
   }),
 });
 
-export const { usePostLoginMutation, usePostLogoutMutation, useGetUserInfoQuery } = userApi;
+export const { usePostLoginMutation, usePostRegisterMutation, usePostLogoutMutation, useGetUserInfoQuery } = userApi;

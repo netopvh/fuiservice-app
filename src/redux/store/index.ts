@@ -7,11 +7,13 @@ import { companyVisitApi } from "../services/companyVisitApi";
 import { productsApi } from "../services/productsApi";
 import { productCategoryApi } from "../services/productCategoryApi";
 import { companyApi } from "../services/companyApi";
+import { tripsApi } from "../services/tripsApi";
 
 export const store = configureStore({
   reducer: {
     themeConfig: themeConfigSlice,
     [userApi.reducerPath]: userApi.reducer,
+    [tripsApi.reducerPath]: tripsApi.reducer,
     [dashboardApi.reducerPath]: dashboardApi.reducer,
     [companyApi.reducerPath]: companyApi.reducer,
     [companyVisitApi.reducerPath]: companyVisitApi.reducer,
@@ -22,6 +24,7 @@ export const store = configureStore({
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat([
       userApi.middleware,
+      tripsApi.middleware,
       dashboardApi.middleware,
       companyApi.middleware,
       companyVisitApi.middleware,
