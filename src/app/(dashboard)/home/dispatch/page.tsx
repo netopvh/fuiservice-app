@@ -2,7 +2,7 @@
 
 import Panel from "@/components/Panel"
 import { useLazyGetTripsQuery } from "@/redux/services/tripsApi"
-import { useEffect, useRef, useState } from "react"
+import { useCallback, useEffect, useRef, useState } from "react"
 import Skeleton from 'react-loading-skeleton'
 import Maps from "@/components/Maps";
 import { currencyFormatter } from "@/utils/currencyUtils";
@@ -10,23 +10,29 @@ import { currencyFormatter } from "@/utils/currencyUtils";
 
 export default function Page() {
 
+    const defaultCenter = { lat: 0, lng: 0 };
 
     const [content, setContent] = useState<string>('dispatch-map')
     const [selected, setSelected] = useState<string>('all')
     const [search, setSearch] = useState<string>('SEARCHING')
-    const [location, setLocation] = useState<any>({ lat: 0, lng: 0 })
+    const [center, setCenter] = useState(defaultCenter);
 
     const interval = useRef<any>()
     const [trigger, { data: trips, error, isLoading }] = useLazyGetTripsQuery()
 
-    useEffect(() => {
-        if ('geolocation' in navigator) {
-            navigator.geolocation.getCurrentPosition((position) => {
-                setLocation({
-                    lat: position.coords.latitude,
-                    lng: position.coords.longitude
-                })
-            })
+    const getCurrentLocation = useCallback(async () => {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    const { latitude, longitude } = position.coords;
+                    setCenter({ lat: latitude, lng: longitude });
+                },
+                (error) => {
+                    console.error('Error getting current location:', error);
+                }
+            );
+        } else {
+            console.error('Geolocation is not supported by this browser.');
         }
     }, [])
 
@@ -40,6 +46,10 @@ export default function Page() {
             clearInterval(interval.current)
         }
     }, [search])
+
+    useEffect(() => {
+        getCurrentLocation();
+    }, []);
 
 
     const handleBodyChange = (body: string) => {
@@ -99,12 +109,13 @@ export default function Page() {
             <div className="grid grid-cols-12 gap-4">
                 <div className="col-span-4">
                     <Panel
+                        key={1}
                         title="Viagens em Pesquisa"
                     >
                         {isLoading && (
                             Array(3).fill(0).map((_, index) => (
                                 <>
-                                    <Skeleton count={5} /><br />
+                                    <Skeleton key={index} count={5} />
                                 </>
                             ))
                         )}
@@ -127,19 +138,22 @@ export default function Page() {
                                     <div className="mb-2"><span className="font-bold">Valor Médio: </span>{currencyFormatter(trip?.estimated_fare)}</div>
                                     <span className="font-bold">{trip?.current_provider_id == 0 ? "Atribuição Manual" : "Atribuição Automática"}</span>
                                 </div>
-                                <div>
-                                    <button type="button" className="btn btn-danger btn-sm">Cancelar</button>
-                                </div>
+                                {trip?.status !== 'CANCELADO' && (
+                                    <div>
+                                        <button type="button" className="btn btn-danger btn-sm">Cancelar</button>
+                                    </div>
+                                )}
                             </div>
                         ))}
                     </Panel>
                 </div>
                 <div className="col-span-8">
                     <Panel
+                        key={2}
                         title="Mapa"
                     >
                         <div className="w-full h-1/2">
-                            <Maps location={location} />
+                            <Maps location={center} />
                         </div>
                     </Panel>
                 </div>

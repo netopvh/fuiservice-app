@@ -16,13 +16,9 @@ export default function Head() {
 
     const pathname = usePathname()
     const [postLogout] = usePostLogoutMutation();
-    const [trigger, { data: user, isLoading, isError, error }] = useLazyGetUserInfoQuery()
+    const { data: user, isLoading } = useGetUserInfoQuery()
 
     const { replace } = useRouter();
-
-    useEffect(() => {
-        trigger()
-    }, [])
 
     useEffect(() => {
         const selector = document.querySelector('ul.horizontal-menu a[href="' + window.location.pathname + '"]');

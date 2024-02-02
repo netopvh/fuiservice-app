@@ -7,13 +7,12 @@ const containerStyle = {
 };
 
 type MapProps = {
-    location: google.maps.LatLngBounds
+    location: any
 }
 
 function Maps({ location }: MapProps) {
 
     const mapsApiKey: string = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || ''
-    const [center, setCenter] = React.useState({ lat: 0, lng: 0 })
 
     const { isLoaded } = useJsApiLoader({
         id: 'google-map-script',
@@ -23,10 +22,6 @@ function Maps({ location }: MapProps) {
     const [map, setMap] = React.useState(null)
 
     const onLoad = React.useCallback(function callback(map: any) {
-
-        const bounds = new window.google.maps.LatLngBounds(location);
-        map.fitBounds(bounds);
-        setCenter(bounds.getCenter().toJSON())
         setMap(map)
     }, [])
 
@@ -37,13 +32,11 @@ function Maps({ location }: MapProps) {
     return isLoaded ? (
         <GoogleMap
             mapContainerStyle={containerStyle}
-            center={center}
-            zoom={2}
+            center={location}
+            zoom={8}
             onLoad={onLoad}
             onUnmount={onUnmount}
         >
-            { /* Child components, such as markers, info windows, etc. */}
-            <></>
         </GoogleMap>
     ) : <></>
 }

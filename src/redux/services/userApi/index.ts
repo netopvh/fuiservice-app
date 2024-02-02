@@ -45,8 +45,8 @@ export const userApi = createApi({
         url: `/logout`,
         method: "POST",
         headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `${getCookie('token')}`
+          'Accept': 'application/json',
+          'Authorization': `Bearer ${getCookie('token')}`
         },
       }),
     }),
@@ -55,8 +55,8 @@ export const userApi = createApi({
         url: "/me",
         method: "GET",
         headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `${getCookie('token')}`
+          'Accept': 'application/json',
+          'Authorization': `Bearer ${getCookie('token')}`
         },
       })
     }),

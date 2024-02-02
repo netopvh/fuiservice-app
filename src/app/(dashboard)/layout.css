@@ -22,3 +22,15 @@ ul.breadcrumb li span {
     background: #1f2937;
     background-color: #1f2937;
 }
+
+.bg-red {
+    background-color: #f56565;
+}
+
+.bg-blue {
+    background-color: #4299e1;
+}
+
+.bg-orange {
+    background-color: #ed8936;
+}

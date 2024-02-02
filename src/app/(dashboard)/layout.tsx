@@ -15,8 +15,8 @@ import Footer from './footer'
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const themeConfigSelector = useAppSelector((state: RootState) => state.themeConfig)
   const dispatch = useAppDispatch()
-  const pathname = usePathname()
-  const searchParams = useSearchParams()
+  // const pathname = usePathname()
+  // const searchParams = useSearchParams()
   // const { i18n } = useTranslation()
 
   const [showLoader, setShowLoader] = useState(true);

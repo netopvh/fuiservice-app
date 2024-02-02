@@ -122,17 +122,17 @@ export default function Page() {
                 <div className="mb-6 grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
 
                     <Panel
-                        title="Transações"
+                        title="Resumo de Transações"
                     >
                         <div>
                             <div className="space-y-6">
                                 <div className="flex">
-                                    <span className="grid h-9 w-9 place-content-center rounded-md bg-success-light text-base text-success dark:bg-success dark:text-success-light">PA</span>
+                                    <span className="grid h-9 w-9 place-content-center rounded-md bg-danger-light text-base text-danger dark:bg-success dark:text-success-light">VU</span>
                                     <div className="flex-1 px-3">
-                                        <div>Paula Azevedo</div>
-                                        <div className="text-xs text-white-dark dark:text-gray-500">10 Jan 1:00PM</div>
+                                        <div className="font-bold">Valor Utilizado</div>
+                                        <div className="text-xs text-white-dark dark:text-gray-500">Atualizado em: </div>
                                     </div>
-                                    <span className="whitespace-pre px-1 text-base text-success ltr:ml-auto rtl:mr-auto">+$36.11</span>
+                                    <span className="whitespace-pre px-1 text-base text-danger ltr:ml-auto rtl:mr-auto">R$ 0,00</span>
                                 </div>
                                 {/* <div className="flex">
                                     <span className="grid h-9 w-9 place-content-center rounded-md bg-warning-light text-warning dark:bg-warning dark:text-warning-light">
@@ -278,10 +278,14 @@ export default function Page() {
                                                 </div>
                                             </td>
                                             <td className="min-w-[150px] text-black dark:text-white">
-                                                <div className="flex items-center">
-                                                    <img className="h-8 w-8 rounded-md object-cover ltr:mr-3 rtl:ml-3" src="/images/profile-6.jpeg" alt="avatar" />
-                                                    <span className="whitespace-nowrap">{trip?.provider.full_name}</span>
-                                                </div>
+                                                {trip?.provider ? (
+                                                    <div className="flex items-center">
+                                                        <img className="h-8 w-8 rounded-md object-cover ltr:mr-3 rtl:ml-3" src="/images/profile-6.jpeg" alt="avatar" />
+                                                        <span className="whitespace-nowrap">{trip?.provider?.full_name}</span>
+                                                    </div>
+                                                ) : (
+                                                    <span className="whitespace-nowrap font-bold">Não atribuído</span>
+                                                )}
                                             </td>
                                             <td>
                                                 {trip?.service_type?.name}
