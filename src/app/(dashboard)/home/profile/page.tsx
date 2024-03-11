@@ -1,15 +1,54 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Tab } from '@headlessui/react';
 import { Fragment } from 'react';
-import { useGetUserInfoQuery } from '@/redux/services/userApi';
+import { useLazyProfileQuery, useProfileQuery } from '@/redux/services/profileApi';
+import * as yup from 'yup';
+import { ErrorMessage, Field, Form, Formik, FormikHelpers } from 'formik';
+import MaskedInput from 'react-text-mask';
+import LoadingButton from '@/components/LoadingButton';
+
+const validationSchema = yup.object({
+    name: yup
+        .string()
+        .required('Nome é obrigatório'),
+    email: yup
+        .string()
+        .email('E-mail inválido')
+        .required('E-mail é obrigatório'),
+    compay_name: yup
+        .string()
+        .required('Nome da empresa é obrigatório'),
+    mobile: yup
+        .string()
+        .nullable()
+        .matches(/^\([0-9]{2}\) [0-9]{5}-[0-9]{4}$/, 'Telefone inválido')
+})
 
 export default function Page() {
 
     const [yearlyPrice, setYearlyPrice] = useState<boolean>(false);
 
-    const { data: user } = useGetUserInfoQuery();
+    const [trigger, { data: user, isLoading }] = useLazyProfileQuery();
+
+    useEffect(() => {
+        trigger();
+    }, []);
+
+    async function submitForm(values: any, { setErrors }: FormikHelpers<any>) {
+        console.log(values);
+        // await postLogin(values)
+        //     .unwrap()
+        //     .then(async (data: IDefaultResponse<ITokenResponse<IDispatcherResponse>>) => {
+        //         const token: Token = new Token(data.data.token);
+        //         await setToken(token);
+        //         replace(APP_ROUTES.private.dashboard);
+        //     })
+        //     .catch((error) => {
+        //         setErrors({ email: error.data.message });
+        //     });
+    }
 
     return (
         <div className="panel" id="simple">
@@ -49,11 +88,74 @@ export default function Page() {
                     </Tab.List>
                     <Tab.Panels>
                         <Tab.Panel>
-                            <div className="active pt-5">
-                                <div className="font-bold">
-                                    {user?.data.company_name}
+                            {isLoading && <div>Carregando...</div>}
+                            {user && (
+                                <div className="active pt-5">
+                                    <Formik
+                                        validateOnChange={true}
+                                        validationSchema={validationSchema}
+                                        onSubmit={submitForm}
+                                        initialValues={{
+                                            name: user?.data.name,
+                                            email: user?.data.email,
+                                            company_name: user?.data.company_name,
+                                            mobile: user?.data.mobile
+                                        }}
+                                    >
+                                        {({ isSubmitting }) => (
+                                            <Form noValidate autoComplete='off' className="space-y-5 dark:text-white" method='post'>
+                                                <div className="mx-auto">
+                                                    {user?.data.avatar ? (
+                                                        <img src={user?.data.avatar} alt="Avatar" className="w-20 h-20 rounded-md object-cover" />
+                                                    ) : (
+                                                        <span className="flex justify-center text-white items-center w-20 h-20 text-center rounded-md object-cover bg-primary text-2xl">{user?.data.name_initials}</span>
+                                                    )}
+
+                                                </div>
+                                                <div>
+                                                    <label htmlFor="name">Nome do Responsável:</label>
+                                                    <Field name="name" type="text" placeholder="Informe seu nome" className="form-input" />
+                                                    <ErrorMessage name="name" component="div" className="text-red-500 font-bold text-sm mt-1 ml-2" />
+                                                </div>
+                                                <div>
+                                                    <label htmlFor="company_name">Nome da Empresa:</label>
+                                                    <Field name="company_name" type="text" placeholder="Informe o nome da empresa" className="form-input" />
+                                                    <ErrorMessage name="company_name" component="div" className="text-red-500 font-bold text-sm mt-1 ml-2" />
+                                                </div>
+                                                <div>
+                                                    <label htmlFor="email">Email:</label>
+                                                    <div className="flex flex-1">
+                                                        <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b]">
+                                                            @
+                                                        </div>
+                                                        <Field name="email" type="email" placeholder="Informe seu e-mail" className="form-input ltr:rounded-l-none rtl:rounded-r-none" />
+                                                    </div>
+                                                    <ErrorMessage name="email" component="div" className="text-red-500 font-bold text-sm mt-1 ml-2" />
+                                                </div>
+                                                <div>
+                                                    <label htmlFor="mobile">Telefone:</label>
+                                                    <MaskedInput
+                                                        name="mobile"
+                                                        type="text"
+                                                        required={false}
+                                                        mask={['(', /[0-9]/, /[0-9]/, ')', /[0-9]/, /[0-9]/, /[0-9]/, /[0-9]/, /[0-9]/, '-', /[0-9]/, /[0-9]/, /[0-9]/, /[0-9]/]}
+                                                        placeholder="Informe o telefone"
+                                                        className="form-input" />
+                                                    <ErrorMessage name="mobile" component="div" className="text-red-500 font-bold text-sm mt-1 ml-2" />
+                                                </div>
+                                                <div className="max-w-xs">
+                                                    <LoadingButton
+                                                        type="submit"
+                                                        loading={isSubmitting}
+                                                        disabled={isSubmitting}
+                                                        text='Salvar Informações'
+                                                        className="btn btn-primary w-full" />
+                                                </div>
+                                            </Form>
+                                        )}
+                                    </Formik>
                                 </div>
-                            </div>
+                            )}
                         </Tab.Panel>
                         <Tab.Panel>
                             <div>

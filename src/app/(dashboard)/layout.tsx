@@ -13,11 +13,9 @@ import Footer from './footer'
 
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
+
   const themeConfigSelector = useAppSelector((state: RootState) => state.themeConfig)
   const dispatch = useAppDispatch()
-  // const pathname = usePathname()
-  // const searchParams = useSearchParams()
-  // const { i18n } = useTranslation()
 
   const [showLoader, setShowLoader] = useState(true);
   const [showTopButton, setShowTopButton] = useState(false);
@@ -48,7 +46,6 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
     const locale = localStorage.getItem('i18nextLng') || themeConfig.locale
     dispatch(toggleLocale(locale))
-    // i18n.changeLanguage(locale)
 
   }, [dispatch])
 
@@ -61,8 +58,6 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         setShowLoader(false);
       }, 200);
     }
-
-    // const url = `${pathname}${searchParams.toString() ? `?${searchParams.toString()}` : ''}`
 
     return () => {
 

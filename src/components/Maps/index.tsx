@@ -8,9 +8,10 @@ const containerStyle = {
 
 type MapProps = {
     location: any
+    setMap: React.Dispatch<React.SetStateAction<any>>
 }
 
-function Maps({ location }: MapProps) {
+function Maps({ location, setMap }: MapProps) {
 
     const mapsApiKey: string = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || ''
 
@@ -18,8 +19,6 @@ function Maps({ location }: MapProps) {
         id: 'google-map-script',
         googleMapsApiKey: mapsApiKey
     })
-
-    const [map, setMap] = React.useState(null)
 
     const onLoad = React.useCallback(function callback(map: any) {
         setMap(map)

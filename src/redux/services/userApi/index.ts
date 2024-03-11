@@ -18,15 +18,11 @@ export const userApi = createApi({
         url: "/login",
         method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          'Accept': 'application/json',
         },
         body,
       }),
       transformResponse: (response: IDefaultResponse<ITokenResponse<IDispatcherResponse>>, meta: FetchBaseQueryMeta) => {
-
-        if (meta?.response?.ok) {
-          return response;
-        }
         return response;
       }
     }),

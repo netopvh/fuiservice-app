@@ -11,6 +11,7 @@ import { useGetUserInfoQuery, useLazyGetUserInfoQuery, usePostLogoutMutation } f
 import { removeCookie } from '@/utils/cookies';
 import { useRouter } from 'next/navigation';
 import { APP_ROUTES } from '@/constants/app-routes';
+import IconUser from '@/components/Icon/IconUser';
 
 export default function Head() {
 
@@ -118,7 +119,7 @@ export default function Head() {
                 <div className="relative flex w-full items-center bg-white px-5 py-2.5 dark:bg-black">
                     <div className="horizontal-logo flex items-center justify-between ltr:mr-2 rtl:ml-2 lg:hidden">
                         <Link href="/" className="main-logo flex shrink-0 items-center">
-                            <img className="inline w-8 ltr:-ml-1 rtl:-mr-1" src="assets/images/logo-thumb.png" alt="logo" />
+                            <img className="inline w-8 ltr:-ml-1 rtl:-mr-1" src="/assets/images/logo-thumb.png" alt="logo" />
                             <span className="hidden align-middle text-lg  font-semibold  transition-all duration-300 ltr:ml-1.5 rtl:mr-1.5 dark:text-white-light md:inline">Fui Service</span>
                         </Link>
                         <button
@@ -492,12 +493,17 @@ export default function Head() {
                                 offset={[0, 8]}
                                 placement={`${isRtl ? 'bottom-start' : 'bottom-end'}`}
                                 btnClassName="relative group block"
-                                button={<img className="h-9 w-9 rounded-full object-cover saturate-50 group-hover:saturate-100" src="/images/user-profile.jpeg" alt="userProfile" />}
+                                button={user?.data.avatar ?
+                                    <img className="h-9 w-9 rounded-full object-cover saturate-50 group-hover:saturate-100" src={user?.data.avatar} alt="userProfile" /> :
+                                    <span className="flex justify-center items-center w-9 h-9 text-center rounded-full object-cover bg-primary text-white">{user?.data.name_initials}</span>
+                                }
                             >
                                 <ul className="w-[230px] !py-0 font-semibold text-dark dark:text-white-dark dark:text-white-light/90">
                                     <li>
                                         <div className="flex items-center px-4 py-4">
-                                            <Image className="h-10 w-10 rounded-md object-cover" src="/images/user-profile.jpeg" alt="userProfile" width={50} height={50} />
+                                            {user?.data.avatar ?
+                                                <Image className="h-10 w-10 rounded-md object-cover" src={user?.data.avatar} alt="userProfile" width={50} height={50} />
+                                                : <span className="flex justify-center items-center w-10 h-10 text-center rounded-full object-cover bg-primary text-white">{user?.data.name_initials}</span>}
                                             <div className="ltr:pl-4 rtl:pr-4">
                                                 <h4 className="text-xs">
                                                     {user?.data.name}
@@ -510,15 +516,7 @@ export default function Head() {
                                     </li>
                                     <li>
                                         <Link href="/home/profile" className="dark:hover:text-white">
-                                            <svg className="ltr:mr-2 rtl:ml-2" width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <circle cx="12" cy="6" r="4" stroke="currentColor" strokeWidth="1.5" />
-                                                <path
-                                                    opacity="0.5"
-                                                    d="M20 17.5C20 19.9853 20 22 12 22C4 22 4 19.9853 4 17.5C4 15.0147 7.58172 13 12 13C16.4183 13 20 15.0147 20 17.5Z"
-                                                    stroke="currentColor"
-                                                    strokeWidth="1.5"
-                                                />
-                                            </svg>
+                                            <IconUser className="ltr:mr-2 rtl:ml-2" />
                                             Perfil
                                         </Link>
                                     </li>

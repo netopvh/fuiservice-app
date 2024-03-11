@@ -1,6 +1,7 @@
 'use client'
 
 import IconBook from '@/components/Icon/IconBook';
+import IconChatDot from '@/components/Icon/IconChatDot';
 import IconMenuCharts from '@/components/Icon/Menu/IconMenuCharts';
 import IconMenuDashboard from '@/components/Icon/Menu/IconMenuDashboard';
 import IconMenuForms from '@/components/Icon/Menu/IconMenuForms';
@@ -10,9 +11,6 @@ import IconMenuWidgets from '@/components/Icon/Menu/IconMenuWidgets';
 import { APP_ROUTES } from '@/constants/app-routes';
 import { RootState, useAppDispatch, useAppSelector } from '@/redux/store';
 import { toggleSidebar } from '@/redux/store/slices/themeConfig';
-import { getCookie } from '@/utils/cookies';
-import { ProfileUtils } from '@/utils/profileUtils';
-import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import React, { useCallback, useEffect, useState } from 'react'
@@ -90,7 +88,7 @@ export default function Sidebar() {
                 <div className="h-full bg-white dark:bg-black">
                     <div className="flex items-center justify-between px-4 py-3">
                         <Link href="/" className="main-logo flex shrink-0 items-center">
-                            <img className="ml-[5px] w-8 flex-none" src="assets/images/logo-thumb.png" alt="logo" />
+                            <img className="ml-[5px] w-8 flex-none" src="/assets/images/logo-thumb.png" alt="logo" />
                             <span className="align-middle text-lg font-semibold ltr:ml-1.5 rtl:mr-1.5 dark:text-white-light lg:inline">Fui Service</span>
                         </Link>
 
@@ -179,7 +177,20 @@ export default function Sidebar() {
                                 </li>
 
                                 <li className="nav-item">
-                                    <Link href="/home" className="group">
+                                    <ul>
+                                        <li className="nav-item">
+                                            <Link href={APP_ROUTES.private.chat} className="group">
+                                                <div className="flex items-center">
+                                                    <IconChatDot className="shrink-0 group-hover:!text-primary" />
+                                                    <span className="text-black ltr:pl-3 rtl:pr-3 dark:text-[#506690] dark:group-hover:text-white-dark">Chat</span>
+                                                </div>
+                                            </Link>
+                                        </li>
+                                    </ul>
+                                </li>
+
+                                <li className="nav-item">
+                                    <Link href={APP_ROUTES.private.requests} className="group">
                                         <div className="flex items-center">
                                             <IconBook className="shrink-0 group-hover:!text-primary" />
                                             <span className="text-black ltr:pl-3 rtl:pr-3 dark:text-[#506690] dark:group-hover:text-white-dark">Solicitações</span>
@@ -187,23 +198,23 @@ export default function Sidebar() {
                                     </Link>
                                 </li>
 
-                                <li className="nav-item">
+                                {/* <li className="nav-item">
                                     <Link href="/home" className="group">
                                         <div className="flex items-center">
                                             <IconMenuForms className="shrink-0 group-hover:!text-primary" />
                                             <span className="text-black ltr:pl-3 rtl:pr-3 dark:text-[#506690] dark:group-hover:text-white-dark">Financeiro</span>
                                         </div>
                                     </Link>
-                                </li>
+                                </li> */}
 
-                                <li className="nav-item">
+                                {/* <li className="nav-item">
                                     <Link href="/home" className="group">
                                         <div className="flex items-center">
                                             <IconMenuNotes className="shrink-0 group-hover:!text-primary" />
                                             <span className="text-black ltr:pl-3 rtl:pr-3 dark:text-[#506690] dark:group-hover:text-white-dark">Cupons</span>
                                         </div>
                                     </Link>
-                                </li>
+                                </li> */}
 
                                 {/* <li className="menu nav-item">
                                 <button type="button" className={`${currentMenu === 'invoice' ? 'active' : ''} nav-link group w-full`} onClick={() => toggleMenu('invoice')}>
@@ -259,7 +270,7 @@ export default function Sidebar() {
                                     <Link href="/" className="group">
                                         <div className="flex items-center">
                                             <IconMenuCharts className="shrink-0 group-hover:!text-primary" />
-                                            <span className="text-black ltr:pl-3 rtl:pr-3 dark:text-[#506690] dark:group-hover:text-white-dark">Lançamento de Serviços</span>
+                                            <span className="text-black ltr:pl-3 rtl:pr-3 dark:text-[#506690] dark:group-hover:text-white-dark">Serviços</span>
                                         </div>
                                     </Link>
                                 </li>
@@ -268,7 +279,7 @@ export default function Sidebar() {
                                     <Link href="/" className="group">
                                         <div className="flex items-center">
                                             <IconMenuInvoice className="shrink-0 group-hover:!text-primary" />
-                                            <span className="text-black ltr:pl-3 rtl:pr-3 dark:text-[#506690] dark:group-hover:text-white-dark">Resumo Financeiro</span>
+                                            <span className="text-black ltr:pl-3 rtl:pr-3 dark:text-[#506690] dark:group-hover:text-white-dark">Financeiro</span>
                                         </div>
                                     </Link>
                                 </li>

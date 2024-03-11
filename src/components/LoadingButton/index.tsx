@@ -12,7 +12,7 @@ export default function LoadingButton({ loading, type, text, className, disabled
 
     return (
         <>
-            <button disabled={disabled} type={type} className={`${className} mb-1.5 block w-full text-center text-white bg-purple-700 hover:bg-purple-900 px-2 py-1.5 rounded-md`}>
+            <button disabled={disabled} type={type} className={`${className} mb-1.5 block w-full text-center text-white bg-primary hover:bg-purple-900 px-2 py-1.5 rounded-md`}>
                 {loading ? (
                     <span>
                         <svg aria-hidden="true" role="status" className="inline mr-3 w-4 h-4 text-white animate-spin" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">

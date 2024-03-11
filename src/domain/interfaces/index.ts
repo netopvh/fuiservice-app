@@ -22,6 +22,8 @@ export interface IDispatcherResponse {
     name: string;
     company_name: string;
     email: string;
+    name_initials: string;
+    avatar: string;
     mobile: string;
     created_at: string;
     updated_at: string;
@@ -42,6 +44,8 @@ export interface IProviderResponse {
     email: string;
     mobile: string;
     avatar: string;
+    latitude: number;
+    longitude: number;
 }
 
 export interface IServiceTypeResponse {
@@ -67,6 +71,7 @@ export interface ITripResponse {
     started_at: string;
     finished_at: string;
     route_key: string;
+    cancel_reason: string;
     estimated_fare: number;
     user: IUserResponse;
     provider: IProviderResponse;
@@ -82,12 +87,16 @@ export interface IUserInfoResponse {
     id: number;
     name: string;
     email: string;
+    avatar: string;
     fantasyName: string;
     active: boolean;
     created_at: string;
     updated_at: string;
     info: string;
+}
 
+export interface IUploadResponse {
+    avatar: string;
 }
 
 export interface RootState {

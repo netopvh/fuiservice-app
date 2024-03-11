@@ -34,8 +34,6 @@ export default function Page() {
         dispatch(setPageTitle('Visão Geral'));
     });
 
-    // const isRtl = useAppSelector((state: RootState) => state.themeConfig.rtlClass) === 'rtl' ? true : false;
-
     return (
         <>
             <div>
